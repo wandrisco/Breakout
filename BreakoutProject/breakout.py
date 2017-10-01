@@ -50,7 +50,7 @@ class BreakoutGame:
         pygame.mouse.set_visible(False)
         self.screen = pygame.display.set_mode(self.screenSize)
 
-        self.font = pygame.font.Font("Fonts\PressStart2P.ttf", 16)
+        self.font = pygame.font.Font("Fonts/PressStart2P.ttf", 16)
 
         self.paddle = Paddle()
         self.ball = Ball(SCREEN_WIDTH/2)
