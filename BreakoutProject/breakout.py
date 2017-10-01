@@ -1,5 +1,5 @@
 import pygame
-import sys
+import sys, os
 import random
 from pygame.locals import *
 
@@ -154,6 +154,8 @@ class BreakoutGame:
         # print('rendering...') # for testing rendering
         # clear the screen
         self.screen.fill(BreakColors.WHITE)
+        self.background = pygame.image.load(os.path.join('pieces','background.jpg'))
+        self.screen.blit(self.background, (0,0))
 
         # draw edges
         # Top
