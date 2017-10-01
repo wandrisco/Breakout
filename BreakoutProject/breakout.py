@@ -31,8 +31,8 @@ class Ball:
 
     def reset(self, pos):
         self.rect = pygame.Rect(pos,SCREEN_HEIGHT-64,16,16)
-        self.dx = 5
-        self.dy = -5
+        self.dx = 4
+        self.dy = -4
 
 class Block:
     def __init__(self, rect):
@@ -63,8 +63,9 @@ class BreakoutGame:
         self.bloopSound = pygame.mixer.Sound('Sounds/Blip2.wav')
         self.explosionSound = pygame.mixer.Sound('Sounds/Explosion.wav')
 
-        self.lives = 1
+        self.lives = 3
         self.score = 0
+        self.level = 1
 
         self.blocks = [pygame.Rect((SCREEN_WIDTH/6*x)+21,(SCREEN_HEIGHT/8*y)+32,64,16) for x in range(6) for y in range(4)]
         
@@ -105,6 +106,7 @@ class BreakoutGame:
 
         # check for collision with paddle
         if self.ball.rect.bottom >= self.paddle.rect.top and self.ball.rect.bottom <= SCREEN_HEIGHT and self.ball.rect.centerx in range(self.paddle.rect.left,self.paddle.rect.right):
+            self.ball.rect.bottom = self.paddle.rect.top
             self.bloopSound.play()
             self.ball.reverseY()
 
@@ -133,7 +135,7 @@ class BreakoutGame:
             self.gameOver()
 
         # check for won
-        if len(self.blocks) <= 0;
+        if len(self.blocks) <= 0:
             self.win()
 
     def render(self):
@@ -160,7 +162,7 @@ class BreakoutGame:
             pygame.draw.rect(self.screen, BreakColors.BLUE, block)
 
         # draw scoreboard
-        scoreSurface = self.font.render("Lives: %i   Score: %i" % (self.lives,self.score), False, BreakColors.RED)
+        scoreSurface = self.font.render("Lives: %i   Score: %i   Level: %i" % (self.lives,self.score,self.level), False, BreakColors.RED)
         self.screen.blit(scoreSurface, (16,16))
 
     def gameOver(self):
@@ -169,6 +171,8 @@ class BreakoutGame:
         self.screen.blit(messageSurface, text_rect)
         pygame.display.update()
         pygame.time.wait(1000)
+        self.level = 0
+        self.score = 0
         self.resetGame()
 
     def win(self):
@@ -177,11 +181,11 @@ class BreakoutGame:
         self.screen.blit(messageSurface, text_rect)
         pygame.display.update()
         pygame.time.wait(1000)
+        self.level += 1
         self.resetGame()
 
     def resetGame(self):
-        self.lives = 10
-        self.score = 0
+        self.lives = 3
         self.ball.reset(SCREEN_WIDTH/2)
         self.blocks = [pygame.Rect((SCREEN_WIDTH/6*x)+21,(SCREEN_HEIGHT/8*y)+32,64,16) for x in range(6) for y in range(4)]
         
