@@ -6,6 +6,7 @@ from pygame.locals import *
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 
+
 class BreakColors:
 	BLACK = pygame.Color(0,0,0)
 	WHITE = pygame.Color(255,255,255)
@@ -15,6 +16,8 @@ class BreakColors:
 class Paddle:
 	def __init__(self):
 		self.rect = pygame.Rect(0,SCREEN_HEIGHT-32,160,16)
+		
+
 
 class Ball:
 	def __init__(self, pos):
@@ -35,6 +38,7 @@ class Ball:
 		self.dx = 4
 		self.dy = -4
 
+
 class Block:
 	def __init__(self, rect):
 		self.rect = rect
@@ -52,7 +56,7 @@ class BreakoutGame:
 		pygame.mouse.set_visible(False)
 		self.screen = pygame.display.set_mode(self.screenSize)
 
-		self.font = pygame.font.Font("Fonts\PressStart2P.ttf", 16)
+		self.font = pygame.font.Font("Fonts/PressStart2P.ttf", 16)
 
 		self.paddle = Paddle()
 		self.ball = Ball(SCREEN_WIDTH/2)
