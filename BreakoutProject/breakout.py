@@ -5,15 +5,18 @@ from pygame.locals import *
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 
+
 class BreakColors:
-    BLACK = pygame.Color(0,0,0)
-    WHITE = pygame.Color(255,255,255)
-    BLUE = pygame.Color(0,0,255)
-    RED = pygame.Color(255,0,0)
+    BLACK = pygame.Color(0, 0, 0)
+    WHITE = pygame.Color(255, 255, 255)
+    BLUE = pygame.Color(0, 0, 255)
+    RED = pygame.Color(255, 0, 0)
+
 
 class Paddle:
     def __init__(self):
-        self.rect = pygame.Rect(0,SCREEN_HEIGHT-32,160,16)
+        self.rect = pygame.Rect(0, SCREEN_HEIGHT - 32, 160, 16)
+
 
 class Ball:
     def __init__(self, pos):
@@ -30,13 +33,15 @@ class Ball:
         self.dx = -self.dx
 
     def reset(self, pos):
-        self.rect = pygame.Rect(pos,SCREEN_HEIGHT-64,16,16)
+        self.rect = pygame.Rect(pos, SCREEN_HEIGHT - 64, 16, 16)
         self.dx = 4
         self.dy = -4
 
+
 class Block:
     def __init__(self, rect):
-        self.rect = rect        
+        self.rect = rect
+
 
 class BreakoutGame:
     def __init__(self):
@@ -44,20 +49,20 @@ class BreakoutGame:
         pygame.mixer.pre_init(44100, -16, 2, 512)
         pygame.init()
         self.clock = pygame.time.Clock()
-        
+
         self.screenSize = SCREEN_WIDTH, SCREEN_HEIGHT
         pygame.display.set_caption('Breakout!')
         pygame.mouse.set_visible(False)
         self.screen = pygame.display.set_mode(self.screenSize)
 
-        self.font = pygame.font.Font("Fonts\PressStart2P.ttf", 16)
+        self.font = pygame.font.Font("Fonts/PressStart2P.ttf", 16)
 
         self.paddle = Paddle()
-        self.ball = Ball(SCREEN_WIDTH/2)
-        
-        self.topEdge = pygame.Rect(0,0,SCREEN_WIDTH,16)
-        self.leftEdge = pygame.Rect(0,0,16,SCREEN_HEIGHT)
-        self.rightEdge = pygame.Rect(SCREEN_WIDTH-16,0,16,SCREEN_HEIGHT)
+        self.ball = Ball(SCREEN_WIDTH / 2)
+
+        self.topEdge = pygame.Rect(0, 0, SCREEN_WIDTH, 16)
+        self.leftEdge = pygame.Rect(0, 0, 16, SCREEN_HEIGHT)
+        self.rightEdge = pygame.Rect(SCREEN_WIDTH - 16, 0, 16, SCREEN_HEIGHT)
 
         self.boopSound = pygame.mixer.Sound('Sounds/Blip1.wav')
         self.bloopSound = pygame.mixer.Sound('Sounds/Blip2.wav')
@@ -67,8 +72,9 @@ class BreakoutGame:
         self.score = 0
         self.level = 1
 
-        self.blocks = [pygame.Rect((SCREEN_WIDTH/6*x)+21,(SCREEN_HEIGHT/8*y)+32,64,16) for x in range(6) for y in range(4)]
-        
+        self.blocks = [pygame.Rect((SCREEN_WIDTH / 6 * x) + 21, (SCREEN_HEIGHT / 8 * y) + 32, 64, 16) for x in range(6)
+                       for y in range(4)]
+
     def run(self):
         self.running = True
         while self.running:
@@ -105,7 +111,8 @@ class BreakoutGame:
             self.ball.reverseY()
 
         # check for collision with paddle
-        if self.ball.rect.bottom >= self.paddle.rect.top and self.ball.rect.bottom <= SCREEN_HEIGHT and self.ball.rect.centerx in range(self.paddle.rect.left,self.paddle.rect.right):
+        if self.paddle.rect.top <= self.ball.rect.bottom <= SCREEN_HEIGHT and self.ball.rect.centerx in range(
+                self.paddle.rect.left, self.paddle.rect.right):
             self.ball.rect.bottom = self.paddle.rect.top
             self.bloopSound.play()
             self.ball.reverseY()
@@ -117,12 +124,11 @@ class BreakoutGame:
             self.blocks.pop(collisionIndex)
             self.explosionSound.play()
             self.score += 100
-            
 
         # check for out
         if self.ball.rect.top >= SCREEN_HEIGHT:
             self.lives -= 1
-            self.ball.reset(self.paddle.rect.x + (self.paddle.rect.width/2))
+            self.ball.reset(self.paddle.rect.x + (self.paddle.rect.width / 2))
 
         # check for paddle out
         if self.paddle.rect.left <= self.leftEdge.right:
@@ -139,18 +145,18 @@ class BreakoutGame:
             self.win()
 
     def render(self):
-        #print('rendering...') # for testing rendering
+        # print('rendering...') # for testing rendering
         # clear the screen
         self.screen.fill(BreakColors.WHITE)
 
         # draw edges
-          #Top
+        # Top
         pygame.draw.rect(self.screen, BreakColors.BLACK, self.topEdge)
-          #Left
+        # Left
         pygame.draw.rect(self.screen, BreakColors.BLACK, self.leftEdge)
-          #Top
+        # Top
         pygame.draw.rect(self.screen, BreakColors.BLACK, self.rightEdge)
- 
+
         # draw the paddle
         pygame.draw.rect(self.screen, BreakColors.BLACK, self.paddle.rect)
 
@@ -162,12 +168,13 @@ class BreakoutGame:
             pygame.draw.rect(self.screen, BreakColors.BLUE, block)
 
         # draw scoreboard
-        scoreSurface = self.font.render("Lives: %i   Score: %i   Level: %i" % (self.lives,self.score,self.level), False, BreakColors.RED)
-        self.screen.blit(scoreSurface, (16,16))
+        scoreSurface = self.font.render("Lives: %i   Score: %i   Level: %i" % (self.lives, self.score, self.level),
+                                        False, BreakColors.RED)
+        self.screen.blit(scoreSurface, (16, 16))
 
     def gameOver(self):
         messageSurface = self.font.render("GAME OVER!", False, BreakColors.RED)
-        text_rect = messageSurface.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+        text_rect = messageSurface.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         self.screen.blit(messageSurface, text_rect)
         pygame.display.update()
         pygame.time.wait(1000)
@@ -177,7 +184,7 @@ class BreakoutGame:
 
     def win(self):
         messageSurface = self.font.render("CONGRATULATIONS!", False, BreakColors.RED)
-        text_rect = messageSurface.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+        text_rect = messageSurface.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         self.screen.blit(messageSurface, text_rect)
         pygame.display.update()
         pygame.time.wait(1000)
@@ -186,9 +193,11 @@ class BreakoutGame:
 
     def resetGame(self):
         self.lives = 3
-        self.ball.reset(SCREEN_WIDTH/2)
-        self.blocks = [pygame.Rect((SCREEN_WIDTH/6*x)+21,(SCREEN_HEIGHT/8*y)+32,64,16) for x in range(6) for y in range(4)]
-        
+        self.ball.reset(SCREEN_WIDTH / 2)
+        self.blocks = [pygame.Rect((SCREEN_WIDTH / 6 * x) + 21, (SCREEN_HEIGHT / 8 * y) + 32, 64, 16) for x in range(6)
+                       for y in range(4)]
+
+
 if __name__ == "__main__":
     game = BreakoutGame()
     game.run()
