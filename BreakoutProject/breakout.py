@@ -14,6 +14,8 @@ class BreakColors:
     WHITE = pygame.Color(255, 255, 255)
     BLUE = pygame.Color(0, 0, 255)
     RED = pygame.Color(255, 0, 0)
+    CYAN = pygame.Color()
+    LAWNGREEN = pygame.Color(124, 252, 0)
 
 
 class Paddle:
@@ -158,10 +160,10 @@ class BreakoutGame:
         pygame.draw.rect(self.screen, BreakColors.BLACK, self.rightEdge)
 
         # draw the paddle
-        pygame.draw.rect(self.screen, BreakColors.BLACK, self.paddle.rect)
+        pygame.draw.rect(self.screen, BreakColors.LAWNGREEN, self.paddle.rect)
 
         # draw the ball
-        pygame.draw.rect(self.screen, BreakColors.BLACK, self.ball.rect)
+        pygame.draw.rect(self.screen, BreakColors.CYAN, self.ball.rect)
 
         # draw blocks
         for block in self.blocks:
