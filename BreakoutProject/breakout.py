@@ -1,6 +1,8 @@
 import pygame
 import sys, os
 import random
+import levels
+from levels import Block
 from pygame.locals import *
 
 SCREEN_WIDTH = 640
@@ -39,12 +41,6 @@ class Ball:
         self.dy = -4
 
 
-class Block:
-    def __init__(self, rect):
-        self.rect = rect
-        self.color = pygame.Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-
-
 class BreakoutGame:
     def __init__(self):
         self.running = False
@@ -69,19 +65,12 @@ class BreakoutGame:
         self.boopSound = pygame.mixer.Sound('Sounds/Blip1.wav')
         self.bloopSound = pygame.mixer.Sound('Sounds/Blip2.wav')
         self.explosionSound = pygame.mixer.Sound('Sounds/Explosion.wav')
-
-        self.lives = 3
+		
         self.score = 0
-        self.level = 1
-
-        blockRects = [pygame.Rect((SCREEN_WIDTH / 6 * x) + 21, (SCREEN_HEIGHT / 8 * y) + 32, 64, 16) for x in range(6)
-                      for y in range(4)]
-        self.blocks = []
-        for blockRect in blockRects:
-            self.blocks.append(Block(blockRect))
 
     def run(self):
         self.running = True
+        self.loadLevel(0)
         while self.running:
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
@@ -198,12 +187,14 @@ class BreakoutGame:
         pygame.time.wait(1000)
         self.level += 1
         self.resetGame()
+    def loadLevel(self, levelNum):
+        self.lives = 3
+        self.level = levelNum
+        self.blocks = levels.levels[levelNum].blocks
 
     def resetGame(self):
         self.lives = 3
-        self.ball.reset(SCREEN_WIDTH / 2)
-        self.blocks = [pygame.Rect((SCREEN_WIDTH / 6 * x) + 21, (SCREEN_HEIGHT / 8 * y) + 32, 64, 16) for x in range(6)
-                       for y in range(4)]
+        self.loadLevel(self.levels + 1)
 
 
 if __name__ == "__main__":
