@@ -97,12 +97,15 @@ class BreakoutGame:
 
         # check for collisions with edges
         if self.ball.rect.left <= self.leftEdge.right:
+            self.ball.rect.left = self.leftEdge.right
             self.boopSound.play()
             self.ball.reverseX()
         elif self.ball.rect.right >= self.rightEdge.left:
+            self.ball.rect.right = self.rightEdge.left
             self.boopSound.play()
             self.ball.reverseX()
         if self.ball.rect.top <= self.topEdge.bottom:
+            self.ball.rect.top = self.topEdge.bottom
             self.boopSound.play()
             self.ball.reverseY()
 
@@ -153,7 +156,7 @@ class BreakoutGame:
         pygame.draw.rect(self.screen, BreakColors.BLACK, self.topEdge)
         # Left
         pygame.draw.rect(self.screen, BreakColors.BLACK, self.leftEdge)
-        # Top
+        # Right
         pygame.draw.rect(self.screen, BreakColors.BLACK, self.rightEdge)
 
         # draw the paddle
@@ -189,6 +192,7 @@ class BreakoutGame:
         pygame.time.wait(1000)
         self.level += 1
         self.resetGame()
+        
     def loadLevel(self, levelNum):
         self.lives = 3
         self.level = levelNum
@@ -196,7 +200,7 @@ class BreakoutGame:
 
     def resetGame(self):
         self.lives = 3
-        self.loadLevel(self.levels + 1)
+        self.loadLevel(self.level)
 
 
 if __name__ == "__main__":
