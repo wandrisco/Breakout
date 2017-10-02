@@ -16,7 +16,7 @@ class BreakColors:
     RED = pygame.Color(255, 0, 0)
     CYAN = pygame.Color(224, 255, 255)
     LAWNGREEN = pygame.Color(124, 252, 0)
-    DARKGRAY = pygame.Color(45, 45, 45)
+    DARKGRAY = pygame.Color(10, 10, 10)
 
 
 class Paddle:
@@ -54,7 +54,8 @@ class BreakoutGame:
         self.screenSize = SCREEN_WIDTH, SCREEN_HEIGHT
         pygame.display.set_caption('Breakout!')
         pygame.mouse.set_visible(False)
-        self.screen = pygame.display.set_mode(self.screenSize)
+        self.screen = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.windowSurf = pygame.display.set_mode(self.screenSize)
 
         self.font = pygame.font.Font("Fonts/PressStart2P.ttf", 16)
 
@@ -75,7 +76,8 @@ class BreakoutGame:
         self.velocityX = 0
         self.lastPaddleRect = self.paddle.rect.copy()
         self.maxVelocity = 8
-        self.screenShake = 10
+        self.screenOffsetX = 0
+        self.screenOffsetY = 0
 
     def run(self):
         self.running = True
@@ -112,14 +114,17 @@ class BreakoutGame:
         if self.ball.rect.left <= self.leftEdge.right:
             self.ball.rect.left = self.leftEdge.right
             self.boopSound.play()
+            self.screenOffsetX = self.ball.dx
             self.ball.reverseX()
         elif self.ball.rect.right >= self.rightEdge.left:
             self.ball.rect.right = self.rightEdge.left
+            self.screenOffsetX = self.ball.dx
             self.boopSound.play()
             self.ball.reverseX()
         if self.ball.rect.top <= self.topEdge.bottom:
             self.ball.rect.top = self.topEdge.bottom
             self.boopSound.play()
+            self.screenOffsetY = self.ball.dy
             self.ball.reverseY()
 
         # check for collision with paddle
@@ -156,6 +161,10 @@ class BreakoutGame:
             self.paddle.rect.left = self.leftEdge.right
         elif self.paddle.rect.right >= self.rightEdge.left:
             self.paddle.rect.right = self.rightEdge.left
+        
+        self.screenOffsetX *= 0.9
+        self.screenOffsetX *= 0.9
+
 
         # check for dead
         if self.lives <= 0:
@@ -196,14 +205,15 @@ class BreakoutGame:
         # draw blocks
         for block in self.blocks:
             pygame.draw.rect(self.screen, block.color, block)
+        self.windowSurf.blit(self.screen, (self.screenOffsetX, self.screenOffsetY))			
 
         # draw scoreboard
         scoreSurface = self.font.render("Lives: %i   Score: %i   Level: %i" % (self.lives, self.score, self.level + 1),
-                                        False, BreakColors.RED)
-        self.screen.blit(scoreSurface, (16, 16))
+                                        False, BreakColors.WHITE)
+        self.windowSurf.blit(scoreSurface, (16, 16))
 
     def gameOver(self):
-        messageSurface = self.font.render("GAME OVER!", False, BreakColors.RED)
+        messageSurface = self.font.render("Game Over!", False, BreakColors.RED)
         text_rect = messageSurface.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         self.screen.blit(messageSurface, text_rect)
         pygame.display.update()
@@ -213,7 +223,7 @@ class BreakoutGame:
         self.resetGame()
 
     def win(self):
-        messageSurface = self.font.render("CONGRATULATIONS!", False, BreakColors.RED)
+        messageSurface = self.font.render("CONGRATULATIONS!", False, BreakColors.LAWNGREEN)
         text_rect = messageSurface.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
         self.screen.blit(messageSurface, text_rect)
         pygame.display.update()
@@ -225,6 +235,7 @@ class BreakoutGame:
         self.lives = 3
         self.level = levelNum
         self.blocks = levels.levels[levelNum].blocks
+        self.rect = pygame.Rect(self.paddle.rect.x + (self.paddle.rect.width / 2), SCREEN_HEIGHT - 64, 20, 20)
 
     def resetGame(self):
         self.lives = 3
