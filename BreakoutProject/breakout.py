@@ -16,6 +16,7 @@ class BreakColors:
     RED = pygame.Color(255, 0, 0)
     CYAN = pygame.Color(224, 255, 255)
     LAWNGREEN = pygame.Color(124, 252, 0)
+    DARKGRAY = pygame.Color(45, 45, 45)
 
 
 class Paddle:
@@ -74,6 +75,7 @@ class BreakoutGame:
         self.velocityX = 0
         self.lastPaddleRect = self.paddle.rect.copy()
         self.maxVelocity = 8
+        self.screenShake = 10
 
     def run(self):
         self.running = True
@@ -103,7 +105,7 @@ class BreakoutGame:
         # update the ball postition
         self.ball.update()
         self.ballList.append(self.ball.rect.copy())
-        if len(self.ballList) > 5:
+        if len(self.ballList) > 10:
             self.ballList.pop(0)
 
         # check for collisions with edges
@@ -122,7 +124,7 @@ class BreakoutGame:
 
         # check for collision with paddle
         if self.ball.rect.bottom >= self.paddle.rect.top and self.ball.rect.bottom <= SCREEN_HEIGHT and self.ball.rect.centerx in range(
-                self.paddle.rect.left, self.paddle.rect.right):
+                self.paddle.rect.left, self.paddle.rect.right) and self.ball.rect.centery < self.paddle.rect.centery:
             self.ball.rect.bottom = self.paddle.rect.top
             self.bloopSound.play()
             self.ball.reverseY()
@@ -166,9 +168,9 @@ class BreakoutGame:
     def render(self):
         # print('rendering...') # for testing rendering
         # clear the screen
-        self.screen.fill(BreakColors.WHITE)
-        self.background = pygame.image.load(os.path.join('pieces','background.jpg'))
-        self.screen.blit(self.background, (0,0))
+        self.screen.fill(BreakColors.DARKGRAY)
+        #self.background = pygame.image.load(os.path.join('pieces','background.jpg'))
+        #self.screen.blit(self.background, (0,0))
 
         # draw edges
         # Top
@@ -182,11 +184,13 @@ class BreakoutGame:
         pygame.draw.rect(self.screen, BreakColors.LAWNGREEN, self.paddle.rect)
 
         # draw the ball
-        z = 0
-        for ballHistory in self.ballList:
-            z = z + 1
-            r,g,b = colorsys.hsv_to_rgb(self.colorRot + z*0.1, 1, 1)
-            pygame.draw.rect(self.screen, pygame.Color(int(r*255), int(g*255), int(b*255)), ballHistory)
+        if self.ball.dx * self.ball.dx + self.ball.dy * self.ball.dy > 32:
+            z = 0
+            for ballHistory in self.ballList:
+                z = z + 1
+                r,g,b = colorsys.hsv_to_rgb(self.colorRot + z*0.1, 1, 1)
+                pygame.draw.rect(self.screen, pygame.Color(int(r*255), int(g*255), int(b*255)), ballHistory)
+        
         pygame.draw.rect(self.screen, pygame.Color(255, 255, 255), self.ball.rect)
 
         # draw blocks
@@ -194,7 +198,7 @@ class BreakoutGame:
             pygame.draw.rect(self.screen, block.color, block)
 
         # draw scoreboard
-        scoreSurface = self.font.render("LIVES: %i   SCORE: %i   LEVEL: %i" % (self.lives, self.score, self.level + 1),
+        scoreSurface = self.font.render("Lives: %i   Score: %i   Level: %i" % (self.lives, self.score, self.level + 1),
                                         False, BreakColors.RED)
         self.screen.blit(scoreSurface, (16, 16))
 
