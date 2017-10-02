@@ -64,6 +64,24 @@ cross.addBlock(300, 310, 50, 30, random.randint(0, 255), random.randint(0, 255),
 
 levels.append(cross);
 
+#level two
+original = Level()
+
+for i in range(16):
+    original.addBlock(16+(38*(i)),64,38,16,200,72,72)
+for j in range(16):
+    original.addBlock(16+(38*(j)),80,38,16,198,108,58)
+for k in range(16):
+    original.addBlock(16+(38*(k)),96,38,16,180,122,48)
+for l in range(16):
+    original.addBlock(16+(38*(l)),112,38,16,162,162,42)
+for m in range(16):
+    original.addBlock(16+(38*(m)),128,38,16,72,160,72)
+for n in range(16):
+    original.addBlock(16+(38*(n)),144,38,16,66,72,200)
+
+levels.append(original);
+
 # final boss
 boss = Level()
 bossSize = 128
