@@ -73,7 +73,7 @@ class BreakoutGame:
         self.colorRot = 0.0
         self.velocityX = 0
         self.lastPaddleRect = self.paddle.rect.copy()
-        self.maxVelocity = 10
+        self.maxVelocity = 8
 
     def run(self):
         self.running = True
