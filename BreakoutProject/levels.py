@@ -21,8 +21,15 @@ class Level:
 
 levels = []
 
-#level one
 one = Level()
-one.addBlock(0, 0, 128, 128, 255, 0, 0)
+numCol = 10
+blockWidth = (640 - 64) / numCol
+padding = 5
+for x in range(numCol):
+	one.addBlock(32 + x*(blockWidth+padding), 20, blockWidth - 2*padding, 20, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+levels.append(one)
 
-levels.append(one);
+#final boss
+boss = Level()
+boss.addBlock(0, 0, 128, 128, 255, 0, 0)
+levels.append(boss);
