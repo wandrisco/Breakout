@@ -1,4 +1,6 @@
 
+
+import colorsys
 import pygame
 import random
 from pygame.locals import *
@@ -68,11 +70,15 @@ cross.addBlock(300, 70, 50, 30, random.randint(0, 255), random.randint(0, 255), 
 cross.addBlock(300, 310, 50, 30, random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
 
-levels.append(cross);
+#levels.append(cross);
 
 
 #final boss
 boss = Level()
-bossSize = 128
-boss.addBlock(640/2-bossSize/2, 480/2-bossSize/2, bossSize, bossSize, 255, 0, 0)
-levels.append(boss);
+for layer in range(9):
+   bossSize = 16 * layer
+   z = layer / 8.0
+   r,g,b = colorsys.hsv_to_rgb(z, 1, 1)
+   boss.addBlock(640/2-bossSize/2, 480/2-bossSize/2, bossSize, bossSize, int(r*255), int(g*255), int(b*255))
+
+levels.append(boss)
