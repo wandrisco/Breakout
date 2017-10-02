@@ -216,7 +216,7 @@ class BreakoutGame:
         # draw scoreboard
         scoreSurface = self.font.render("Lives: %i   Score: %i   Level: %i" % (self.lives, self.score, self.level + 1),
                                         False, BreakColors.WHITE)
-        self.windowSurf.blit(scoreSurface, (16, 16))
+        self.windowSurf.blit(scoreSurface, (48, 16))
 
     def gameOver(self):
         messageSurface = self.font.render("Game Over!", False, BreakColors.RED)
