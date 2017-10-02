@@ -38,7 +38,7 @@ class Ball:
         self.dx = -self.dx
 
     def reset(self, pos):
-        self.rect = pygame.Rect(pos, SCREEN_HEIGHT - 64, 16, 16)
+        self.rect = pygame.Rect(pos, SCREEN_HEIGHT - 64, 20, 20)
         self.dx = 4
         self.dy = -4
 
@@ -170,7 +170,7 @@ class BreakoutGame:
             pygame.draw.rect(self.screen, block.color, block)
 
         # draw scoreboard
-        scoreSurface = self.font.render("Lives: %i   Score: %i   Level: %i" % (self.lives, self.score, self.level),
+        scoreSurface = self.font.render("LIVES: %i   SCORE: %i   LEVEL: %i" % (self.lives, self.score, self.level + 1),
                                         False, BreakColors.RED)
         self.screen.blit(scoreSurface, (16, 16))
 
