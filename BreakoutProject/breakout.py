@@ -69,19 +69,22 @@ class BreakoutGame:
         self.boopSound = pygame.mixer.Sound('Sounds/Blip1.wav')
         self.bloopSound = pygame.mixer.Sound('Sounds/Blip2.wav')
         self.explosionSound = pygame.mixer.Sound('Sounds/Explosion.wav')
+        self.music = pygame.mixer.Sound('Sounds/music.ogg')
 		
         self.score = 0
         self.ballList = []
         self.colorRot = 0.0
         self.velocityX = 0
         self.lastPaddleRect = self.paddle.rect.copy()
-        self.maxVelocity = 8
+        self.maxVelocity = 16
+        self.maxVelocityChange = 8
         self.screenOffsetX = 0
         self.screenOffsetY = 0
 
     def run(self):
         self.running = True
         self.loadLevel(0)
+        self.music.play()
         while self.running:
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
@@ -90,6 +93,7 @@ class BreakoutGame:
                 if event.type == MOUSEMOTION:
                     # update the paddle postition to the mouse position
                     self.mousePosition = event.pos[0]
+                    self.mouseRect = Rect(event.pos[0]-4, event.pos[1]-4, 8, 8)
                     self.paddle.rect.x = self.mousePosition - (self.paddle.rect.width / 2)
                     self.velocityX = self.paddle.rect.x - self.lastPaddleRect.x
                     self.lastPaddleRect = self.paddle.rect.copy()
@@ -133,7 +137,8 @@ class BreakoutGame:
             self.ball.rect.bottom = self.paddle.rect.top
             self.bloopSound.play()
             self.ball.reverseY()
-            self.ball.dx += max(-self.maxVelocity, min(self.maxVelocity, self.velocityX))
+            spin = max(-self.maxVelocityChange, min(self.maxVelocityChange, self.velocityX))
+            self.ball.dx = max(-self.maxVelocity, min(self.maxVelocity, self.ball.dx+spin))
 
         # check for collision with block
         for block in self.blocks:
@@ -191,6 +196,7 @@ class BreakoutGame:
 
         # draw the paddle
         pygame.draw.rect(self.screen, BreakColors.LAWNGREEN, self.paddle.rect)
+        pygame.draw.rect(self.screen, BreakColors.WHITE, self.mouseRect)
 
         # draw the ball
         if self.ball.dx * self.ball.dx + self.ball.dy * self.ball.dy > 32:
@@ -215,7 +221,7 @@ class BreakoutGame:
     def gameOver(self):
         messageSurface = self.font.render("Game Over!", False, BreakColors.RED)
         text_rect = messageSurface.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
-        self.screen.blit(messageSurface, text_rect)
+        self.windowSurf.blit(messageSurface, text_rect)
         pygame.display.update()
         pygame.time.wait(1000)
         self.level = 0
@@ -225,20 +231,20 @@ class BreakoutGame:
     def win(self):
         messageSurface = self.font.render("CONGRATULATIONS!", False, BreakColors.LAWNGREEN)
         text_rect = messageSurface.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
-        self.screen.blit(messageSurface, text_rect)
+        self.windowSurf.blit(messageSurface, text_rect)
         pygame.display.update()
         pygame.time.wait(1000)
         self.level += 1
         self.resetGame()
         
     def loadLevel(self, levelNum):
-        self.lives = 3
+        self.lives = 8
         self.level = levelNum
         self.blocks = levels.levels[levelNum].blocks
-        self.rect = pygame.Rect(self.paddle.rect.x + (self.paddle.rect.width / 2), SCREEN_HEIGHT - 64, 20, 20)
+        self.ball.rect = pygame.Rect(self.paddle.rect.x + (self.paddle.rect.width / 2), SCREEN_HEIGHT - 64, 20, 20)
 
     def resetGame(self):
-        self.lives = 3
+        self.lives = 8
         self.loadLevel(self.level)
 
 

@@ -67,8 +67,8 @@ levels.append(cross);
 
 # final boss
 boss = Level()
-for layer in range(9):
-   bossSize = 16 * layer
+for layer in range(17):
+   bossSize = 16 + 16 * layer
    z = layer / 8.0
    r,g,b = colorsys.hsv_to_rgb(z, 1, 1)
    boss.addBlock(640/2-bossSize/2, 480/2-bossSize/2, bossSize, bossSize, int(r*255), int(g*255), int(b*255))
