@@ -4,7 +4,7 @@ import random
 import levels
 from levels import Block
 from pygame.locals import *
-
+import colorsys
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 
@@ -67,6 +67,8 @@ class BreakoutGame:
         self.explosionSound = pygame.mixer.Sound('Sounds/Explosion.wav')
 		
         self.score = 0
+        self.ballList = []
+        self.colorRot = 0.0
 
     def run(self):
         self.running = True
@@ -88,10 +90,14 @@ class BreakoutGame:
             self.render()
             pygame.display.update()
             self.clock.tick(60)
+            self.colorRot = self.colorRot + 0.05
 
     def tick(self):
         # update the ball postition
         self.ball.update()
+        self.ballList.append(self.ball.rect.copy())
+        if len(self.ballList) > 5:
+            self.ballList.pop(0)
 
         # check for collisions with edges
         if self.ball.rect.left <= self.leftEdge.right:
@@ -161,7 +167,12 @@ class BreakoutGame:
         pygame.draw.rect(self.screen, BreakColors.BLACK, self.paddle.rect)
 
         # draw the ball
-        pygame.draw.rect(self.screen, BreakColors.BLACK, self.ball.rect)
+        z = 0
+        for ballHistory in self.ballList:
+            z = z + 1
+            r,g,b = colorsys.hsv_to_rgb(self.colorRot + z*0.1, 1, 1)
+            pygame.draw.rect(self.screen, pygame.Color(int(r*255), int(g*255), int(b*255)), ballHistory)
+        pygame.draw.rect(self.screen, pygame.Color(255, 255, 255), self.ball.rect)
 
         # draw blocks
         for block in self.blocks:

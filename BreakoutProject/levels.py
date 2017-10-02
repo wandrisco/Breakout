@@ -31,5 +31,6 @@ levels.append(one)
 
 #final boss
 boss = Level()
-boss.addBlock(0, 0, 128, 128, 255, 0, 0)
+bossSize = 128
+boss.addBlock(640/2-bossSize/2, 480/2-bossSize/2, bossSize, bossSize, 255, 0, 0)
 levels.append(boss);
