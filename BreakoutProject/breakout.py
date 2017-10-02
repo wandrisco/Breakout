@@ -14,7 +14,7 @@ class BreakColors:
     WHITE = pygame.Color(255, 255, 255)
     BLUE = pygame.Color(0, 0, 255)
     RED = pygame.Color(255, 0, 0)
-    CYAN = pygame.Color()
+    CYAN = pygame.Color(224, 255, 255)
     LAWNGREEN = pygame.Color(124, 252, 0)
 
 
