@@ -68,17 +68,17 @@ levels.append(cross);
 original = Level()
 
 for i in range(16):
-    original.addBlock(16+(38*(i)),64,38,16,200,72,72)
+    original.addBlock(16+(38*(i)),80,38,16,200,72,72)
 for j in range(16):
-    original.addBlock(16+(38*(j)),80,38,16,198,108,58)
+    original.addBlock(16+(38*(j)),96,38,16,198,108,58)
 for k in range(16):
-    original.addBlock(16+(38*(k)),96,38,16,180,122,48)
+    original.addBlock(16+(38*(k)),112,38,16,180,122,48)
 for l in range(16):
-    original.addBlock(16+(38*(l)),112,38,16,162,162,42)
+    original.addBlock(16+(38*(l)),128,38,16,162,162,42)
 for m in range(16):
-    original.addBlock(16+(38*(m)),128,38,16,72,160,72)
+    original.addBlock(16+(38*(m)),144,38,16,72,160,72)
 for n in range(16):
-    original.addBlock(16+(38*(n)),144,38,16,66,72,200)
+    original.addBlock(16+(38*(n)),160,38,16,66,72,200)
 
 levels.append(original);
 
