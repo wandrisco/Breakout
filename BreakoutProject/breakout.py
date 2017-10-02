@@ -71,6 +71,9 @@ class BreakoutGame:
         self.score = 0
         self.ballList = []
         self.colorRot = 0.0
+        self.velocityX = 0
+        self.lastPaddleRect = self.paddle.rect.copy()
+        self.maxVelocity = 10
 
     def run(self):
         self.running = True
@@ -84,6 +87,8 @@ class BreakoutGame:
                     # update the paddle postition to the mouse position
                     self.mousePosition = event.pos[0]
                     self.paddle.rect.x = self.mousePosition - (self.paddle.rect.width / 2)
+                    self.velocityX = self.paddle.rect.x - self.lastPaddleRect.x
+                    self.lastPaddleRect = self.paddle.rect.copy()
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
@@ -121,11 +126,19 @@ class BreakoutGame:
             self.ball.rect.bottom = self.paddle.rect.top
             self.bloopSound.play()
             self.ball.reverseY()
+            self.ball.dx += min(self.maxVelocity, self.velocityX)
 
         # check for collision with block
         for block in self.blocks:
             if self.ball.rect.colliderect(block.rect):
-                self.ball.reverseY()
+                overlappingArea = self.ball.rect.clip(block.rect)
+                if overlappingArea.width > overlappingArea.height:
+                    self.ball.reverseY()
+                elif overlappingArea.height > overlappingArea.width:
+                    self.ball.reverseX()
+                else:
+                    self.ball.reverseX()
+                    self.ball.reverseY()
                 self.blocks.remove(block)
                 self.explosionSound.play()
                 self.score += 100
