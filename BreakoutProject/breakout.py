@@ -126,7 +126,7 @@ class BreakoutGame:
             self.ball.rect.bottom = self.paddle.rect.top
             self.bloopSound.play()
             self.ball.reverseY()
-            self.ball.dx += min(self.maxVelocity, self.velocityX)
+            self.ball.dx += max(-self.maxVelocity, min(self.maxVelocity, self.velocityX))
 
         # check for collision with block
         for block in self.blocks:
