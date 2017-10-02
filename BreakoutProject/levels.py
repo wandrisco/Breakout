@@ -12,7 +12,7 @@ class Level:
 	def __init__(self):
 		self.blocks = []
 		self.paddleWidth = 160
-	
+
 	def addBlock(self, x, y, w, h, r, g, b):
 		block = Block(pygame.Rect(x, y, w, h))
 		block.color = pygame.Color(r, g, b)
